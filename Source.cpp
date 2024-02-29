@@ -3,12 +3,12 @@
 
 using namespace std;
 
-// Структура для представления ребра графа
+// РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ СЂРµР±СЂР° РіСЂР°С„Р°
 struct Edge {
     int source, destination, weight;
 };
 
-// Функция для построения графа по матрице смежности и вектору длительностей работ
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ РіСЂР°С„Р° РїРѕ РјР°С‚СЂРёС†Рµ СЃРјРµР¶РЅРѕСЃС‚Рё Рё РІРµРєС‚РѕСЂСѓ РґР»РёС‚РµР»СЊРЅРѕСЃС‚РµР№ СЂР°Р±РѕС‚
 vector<Edge> buildGraph(vector<vector<int>>& adjacencyMatrix, vector<int>& durations) {
     vector<Edge> graph;
     int n = adjacencyMatrix.size();
@@ -28,18 +28,18 @@ vector<Edge> buildGraph(vector<vector<int>>& adjacencyMatrix, vector<int>& durat
     return graph;
 }
 
-// Функция для нахождения критического пути в графе
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РЅР°С…РѕР¶РґРµРЅРёСЏ РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ РїСѓС‚Рё РІ РіСЂР°С„Рµ
 void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& durations) {
     int n = adjacencyMatrix.size();
     vector<Edge> graph = buildGraph(adjacencyMatrix, durations);
 
-    // Вычисление ранних и поздних событий
+    // Р’С‹С‡РёСЃР»РµРЅРёРµ СЂР°РЅРЅРёС… Рё РїРѕР·РґРЅРёС… СЃРѕР±С‹С‚РёР№
     vector<int> earlyStart(n, 0);
     vector<int> earlyFinish(n, 0);
     vector<int> lateStart(n, INT_MAX);
     vector<int> lateFinish(n, INT_MAX);
 
-    // Расчет ранних событий
+    // Р Р°СЃС‡РµС‚ СЂР°РЅРЅРёС… СЃРѕР±С‹С‚РёР№
     for (int i = 0; i < n; i++) {
         for (Edge edge : graph) {
             if (edge.destination == i) {
@@ -49,7 +49,7 @@ void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& duratio
         }
     }
 
-    // Расчет поздних событий
+    // Р Р°СЃС‡РµС‚ РїРѕР·РґРЅРёС… СЃРѕР±С‹С‚РёР№
     lateFinish[n - 1] = earlyFinish[n - 1];
     lateStart[n - 1] = lateFinish[n - 1] - durations[n - 1];
 
@@ -61,8 +61,8 @@ void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& duratio
             }
         }
     }
-    // Нахождение критического пути и его длины
-    cout << "Критический путь: ";
+    // РќР°С…РѕР¶РґРµРЅРёРµ РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ РїСѓС‚Рё Рё РµРіРѕ РґР»РёРЅС‹
+    cout << "РљСЂРёС‚РёС‡РµСЃРєРёР№ РїСѓС‚СЊ: ";
     int criticalPathLength = 0;
     for (int i = 0; i < n; i++) {
         if (earlyStart[i] == lateStart[i]) {
@@ -72,15 +72,15 @@ void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& duratio
     }
     cout << endl;
 
-    // Вывод длины критического пути
-    cout << "Длина критического пути: " << criticalPathLength << endl;
+    // Р’С‹РІРѕРґ РґР»РёРЅС‹ РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ РїСѓС‚Рё
+    cout << "Р”Р»РёРЅР° РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ РїСѓС‚Рё: " << criticalPathLength << endl;
 
    
     cout << endl;
 
-    // Вывод таблицы
-    cout << "Таблица:\n";
-    cout << "Работа\tДлительность\tРанний старт\tРанний финиш\tПоздний старт\tПоздний финиш\n";
+    // Р’С‹РІРѕРґ С‚Р°Р±Р»РёС†С‹
+    cout << "РўР°Р±Р»РёС†Р°:\n";
+    cout << "Р Р°Р±РѕС‚Р°\tР”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ\tР Р°РЅРЅРёР№ СЃС‚Р°СЂС‚\tР Р°РЅРЅРёР№ С„РёРЅРёС€\tРџРѕР·РґРЅРёР№ СЃС‚Р°СЂС‚\tРџРѕР·РґРЅРёР№ С„РёРЅРёС€\n";
     for (int i = 0; i < n; i++) {
         cout << i << "\t" << durations[i] << "\t\t" << earlyStart[i] << "\t\t" << earlyFinish[i]
             << "\t\t" << lateStart[i] << "\t\t" << lateFinish[i] << endl;

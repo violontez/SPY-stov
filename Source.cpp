@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <climits>
 
 using namespace std;
 
@@ -7,6 +8,22 @@ using namespace std;
 struct Edge {
     int source, destination, weight;
 };
+
+// Функция для проверки возможности выполнить алгоритм
+bool canExecute(vector<vector<int>>& adjacencyMatrix, vector<int>& durations) {
+    int n = adjacencyMatrix.size();
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (adjacencyMatrix[i][j] != 0 && i == j) {
+                return false; // Ошибка: Присутствует цикл в графе
+            }
+            if (adjacencyMatrix[i][j] != 0 && adjacencyMatrix[i][j] != 1) {
+                return false; // Ошибка: Некорректные данные в матрице смежности
+            }
+        }
+    }
+    return true;
+}
 
 // Функция для построения графа по матрице смежности и вектору длительностей работ
 vector<Edge> buildGraph(vector<vector<int>>& adjacencyMatrix, vector<int>& durations) {
@@ -30,6 +47,12 @@ vector<Edge> buildGraph(vector<vector<int>>& adjacencyMatrix, vector<int>& durat
 
 // Функция для нахождения критического пути в графе
 void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& durations) {
+    // Проверка на возможность выполнить алгоритм
+    if (!canExecute(adjacencyMatrix, durations)) {
+        cout << "Ошибка: Граф содержит цикл или некорректные данные в матрице смежности. Невозможно выполнить алгоритм." << endl;
+        return;
+    }
+
     int n = adjacencyMatrix.size();
     vector<Edge> graph = buildGraph(adjacencyMatrix, durations);
 
@@ -61,6 +84,7 @@ void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& duratio
             }
         }
     }
+
     // Нахождение критического пути и его длины
     cout << "Критический путь: ";
     int criticalPathLength = 0;
@@ -75,7 +99,6 @@ void findCriticalPath(vector<vector<int>>& adjacencyMatrix, vector<int>& duratio
     // Вывод длины критического пути
     cout << "Длина критического пути: " << criticalPathLength << endl;
 
-   
     cout << endl;
 
     // Вывод таблицы
@@ -92,7 +115,7 @@ int main() {
     vector<vector<int>> adjacencyMatrix = {
         {0, 1, 1, 0, 0, 0},
         {1, 0, 0, 1, 0, 0},
-        {0, 0, 0, 0, 1, 0},
+        {0, 0, 0, 1, 1, 0},
         {0, 0, 0, 0, 0, 1},
         {0, 1, 0, 1, 0, 1},
         {0, 0, 0, 0, 0, 0}
